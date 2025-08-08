@@ -4,7 +4,7 @@ public enum HealthState {
 
   HEALTHY("H"),
   FEVER("F"),
-  DIABETIC("D"),
+  DIABETES("D"),
   TUBERCULOSIS("T"),
   DEAD("X");
 
