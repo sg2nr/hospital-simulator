@@ -7,17 +7,24 @@
     <groupId>com.hospital</groupId>
     <artifactId>simulator</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Hospital Simulator</name>
+    <description>A simulator for hospital to simulate the future patients' health state.</description>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.6.0</version>
+            <version>5.13.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.18.0</version>
         </dependency>
     </dependencies>
 
