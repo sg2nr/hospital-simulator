@@ -1,26 +1,25 @@
 package com.hospital.rule.impl;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
 import com.hospital.rule.Rule;
+import com.hospital.rule.impl.utils.HealthStateMapBuilder;
 
 public class InsulinRule implements Rule {
 
   @Override
-  public HealthState apply(HealthState currenHealthState, Set<Drug> drugs) {
-
-    if (drugs.contains(Drug.INSULIN)) {
-      if (currenHealthState == HealthState.HEALTHY && drugs.contains(Drug.ANTIBIOTIC)) {
-        return HealthState.FEVER;
-      }
-
-      if (currenHealthState == HealthState.DIABETES) {
-        return HealthState.DIABETES;
-      }
+  public Map<HealthState, Integer> apply(Map<HealthState, Integer> patientsByState, Set<Drug> drugs) {
+    if (drugs.contains(Drug.INSULIN) && drugs.contains(Drug.ANTIBIOTIC)) {
+      int healthyCount = patientsByState.getOrDefault(HealthState.HEALTHY, 0);
+      return HealthStateMapBuilder.from(patientsByState)
+          .transition(HealthState.HEALTHY, HealthState.FEVER, healthyCount)
+          .build();
     }
 
-    return currenHealthState;
+    return HealthStateMapBuilder.from(patientsByState)
+            .build();
   }
 }

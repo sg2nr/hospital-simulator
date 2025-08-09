@@ -2,11 +2,11 @@ package com.hospital.rule.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import com.hospital.domain.Drug;
@@ -15,61 +15,70 @@ import com.hospital.domain.HealthState;
 class ParacetamolRuleTest {
 
   @Test
-  void testApplyWhenHealthStateIsFeverAndParacetamolIsGivenShouldReturnHealthy() {
+  void testApplyWhenAllPatientsHaveFeverAndParacetamolIsGivenShouldReturnAllHealthy() {
     // Given
-    HealthState currentHealthState = HealthState.FEVER;
+    int feverCount = 1_000;
     Set<Drug> drugs = Set.of(Drug.PARACETAMOL);
-    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> initialCounts = Map.of(HealthState.FEVER, feverCount);
 
     // When
-    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);
-
-    // Then
-    assertEquals(HealthState.HEALTHY, newHealthState);
-  }
-
-  @ParameterizedTest
-  @EnumSource(HealthState.class)
-  void testApplyWhenParacetamolAndAspirinAreGivenShouldReturnDead(HealthState currentHealthState) {
-    // Given
-    Set<Drug> drugs = Set.of(Drug.PARACETAMOL, Drug.ASPIRIN);
     ParacetamolRule paracetamolRule = new ParacetamolRule();
-
-    // When
-    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);
+    Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(HealthState.DEAD, newHealthState);
+    int expectedHealthyCount = feverCount;
+    assertEquals(expectedHealthyCount, result.get(HealthState.HEALTHY));
+    assertEquals(0, result.get(HealthState.FEVER));
   }
 
   @ParameterizedTest
   @EnumSource(value = HealthState.class, names = { "HEALTHY", "TUBERCULOSIS", "DIABETES", "DEAD" })
-  void testApplyWhenHealthStateIsNotFeverAndParacetamolIsGivenShouldNotChangeHealthState(
-      HealthState currentHealthState) {
+  void testApplyWhenHealthStateIsNotFeverAndParacetamolIsGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
+    int count = 1_000;
     Set<Drug> drugs = Set.of(Drug.PARACETAMOL);
-    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
 
     // When
-    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);
+    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
+  } 
+
+  @ParameterizedTest
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "TUBERCULOSIS", "DIABETES", "FEVER"})
+  void testApplyWhenParacetamolAndAspirinAreGivenShouldReturnDead(HealthState currentHealthState) {
+    // Given
+    int count = 1_000;
+    Set<Drug> drugs = Set.of(Drug.PARACETAMOL, Drug.ASPIRIN);
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
+    
+    // When
+    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
+
+    // Then
+    assertEquals(0, result.get(currentHealthState));
+    assertEquals(count, result.get(HealthState.DEAD));
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "FEVER", "TUBERCULOSIS", "DIABETES", "DEAD"
-  })
+  @EnumSource(HealthState.class)
   void testApplyWhenParacetamolIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
+    int count = 2_000;
     Set<Drug> drugs = Set.of();
-    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
 
     // When
-    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);
+    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
 }

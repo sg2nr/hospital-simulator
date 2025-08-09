@@ -2,6 +2,7 @@ package com.hospital.rule.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -14,45 +15,52 @@ import com.hospital.domain.HealthState;
 class InsulinRuleTest {
 
   @Test
-  void testApplyWhenHealthStateIsDiabetesAndInsulinIsGivenShouldReturnDiabetes() {
+  void testApplyWhenAllPatientsHaveDiabetesAndInsulinIsGivenShouldReturnAllDiabetes() {
     // Given
-    HealthState currentHealthState = HealthState.DIABETES;
+    int diabetesCount = 1_000;
     Set<Drug> drugs = Set.of(Drug.INSULIN);
-    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(HealthState.DIABETES, diabetesCount);
 
     // When
-    HealthState newHealthState = insulinRule.apply(currentHealthState, drugs);
+    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> result = insulinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(HealthState.DIABETES, newHealthState);
+    assertEquals(diabetesCount, result.get(HealthState.DIABETES));
+    assertEquals(0, result.get(HealthState.HEALTHY));
   }
 
   @Test
-  void testApplyWhenHealthStateIsHealthyAndInsulinAndAntibioticAreGivenShouldReturnFever() {
+  void testApplyWhenAllPatientsAreHealthyAndInsulinAndAntibioticAreGivenShouldReturnAllFever() {
     // Given
-    HealthState currentHealthState = HealthState.HEALTHY;
+    int healthyCount = 15_000;
     Set<Drug> drugs = Set.of(Drug.INSULIN, Drug.ANTIBIOTIC);
-    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(HealthState.HEALTHY, healthyCount);
 
     // When
-    HealthState newHealthState = insulinRule.apply(currentHealthState, drugs);
+    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> result = insulinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(HealthState.FEVER, newHealthState);
+    assertEquals(0, result.get(HealthState.HEALTHY));
+    assertEquals(healthyCount, result.get(HealthState.FEVER));
   }
 
   @ParameterizedTest
   @EnumSource(HealthState.class)
   void testApplyWhenInsulinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
+    int count = 10_000;
     Set<Drug> drugs = Set.of();
-    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
 
     // When
-    HealthState newHealthState = insulinRule.apply(currentHealthState, drugs);
+    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> result = insulinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
 
   @ParameterizedTest
@@ -60,13 +68,16 @@ class InsulinRuleTest {
   void testApplyWhenHealthStateIsNotDiabetesAndOnlyInsulinIsGivenShouldNotChangeHealthState(
       HealthState currentHealthState) {
     // Given
+    int count = 50_000;
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
     Set<Drug> drugs = Set.of(Drug.INSULIN);
-    InsulinRule insulinRule = new InsulinRule();
 
     // When
-    HealthState newHealthState = insulinRule.apply(currentHealthState, drugs);
+    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> result = insulinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
 }

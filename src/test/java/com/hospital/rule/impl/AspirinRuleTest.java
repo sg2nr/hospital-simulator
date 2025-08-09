@@ -2,6 +2,7 @@ package com.hospital.rule.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -14,44 +15,54 @@ import com.hospital.domain.HealthState;
 class AspirinRuleTest {
 
   @Test
-  void testApplyWhenHealthStateIsFeverAndAspirinIsGivenShouldReturnHealthy() {
+  void testApplyWhenAllPatientsHaveFeverAndAspirinIsGivenShouldReturnAllHealthy() {
     // Given
-    HealthState currentHealthState = HealthState.FEVER;
+    int feverCount = 1_000;
     Set<Drug> drugs = Set.of(Drug.ASPIRIN);
-    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(HealthState.FEVER, feverCount);
 
     // When
-    HealthState newHealthState = aspirinRule.apply(currentHealthState, drugs);
+    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> result = aspirinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(HealthState.HEALTHY, newHealthState);
+    int expectedHealthyCount = feverCount;
+    assertEquals(expectedHealthyCount, result.get(HealthState.HEALTHY));
+    assertEquals(0, result.get(HealthState.FEVER));
   }
 
   @ParameterizedTest
   @EnumSource(value = HealthState.class, names = { "HEALTHY", "TUBERCULOSIS", "DIABETES", "DEAD" })
-  void testApplyWhenHealthStateIsNotFeverShouldNotChangeHealthState(HealthState currentHealthState) {
+  void testApplyWhenHealthStateIsNotFeverAndAspirinIsGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
+    int count = 300_000;
     Set<Drug> drugs = Set.of(Drug.ASPIRIN);
-    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
 
     // When
-    HealthState newHealthState = aspirinRule.apply(currentHealthState, drugs);
+    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> result = aspirinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(0, result.get(HealthState.FEVER));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
 
   @ParameterizedTest
   @EnumSource(HealthState.class)
   void testApplyWhenAspirinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
+    int count = 10_000;
     Set<Drug> drugs = Set.of();
-    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> initialCounts = Map.of(currentHealthState, count);
 
     // When
-    HealthState newHealthState = aspirinRule.apply(currentHealthState, drugs);
+    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> result = aspirinRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(currentHealthState, newHealthState);
+    assertEquals(count, result.get(currentHealthState));
+    assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
 }
