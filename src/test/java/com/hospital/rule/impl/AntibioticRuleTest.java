@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
@@ -28,22 +28,22 @@ class AntibioticRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({"HEALTHY", "FEVER", "DIABETES", "DEAD"})
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "FEVER", "DIABETES", "DEAD" })
   void testApplyWhenHealthStateIsNotTuberculosisShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of(Drug.ANTIBIOTIC);
-    AntibioticRule antibioticRule = new AntibioticRule(); 
+    AntibioticRule antibioticRule = new AntibioticRule();
 
     // When
     HealthState newHealthState = antibioticRule.apply(currentHealthState, drugs);
-    
+
     // Then
     assertEquals(currentHealthState, newHealthState);
   }
 
   @ParameterizedTest
-  @CsvSource({"HEALTHY", "FEVER", "DIABETES", "DEAD", "TUBERCULOSIS"})
-  void testApplyWhenAntiobioticIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
+  @EnumSource(HealthState.class)
+  void testApplyWhenAntibioticIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of();
     AntibioticRule antibioticRule = new AntibioticRule();
