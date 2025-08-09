@@ -7,6 +7,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
@@ -28,9 +29,7 @@ class ParacetamolRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "FEVER", "TUBERCULOSIS", "DIABETES", "DEAD"
-  })
+  @EnumSource(HealthState.class)
   void testApplyWhenParacetamolAndAspirinAreGivenShouldReturnDead(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of(Drug.PARACETAMOL, Drug.ASPIRIN);
@@ -44,10 +43,9 @@ class ParacetamolRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "TUBERCULOSIS", "DIABETES", "DEAD"
-  })
-  void testApplyWhenHealthStateIsNotFeverAndParacetamolIsGivenShouldNotChangeHealthState(HealthState currentHealthState) {
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "TUBERCULOSIS", "DIABETES", "DEAD" })
+  void testApplyWhenHealthStateIsNotFeverAndParacetamolIsGivenShouldNotChangeHealthState(
+      HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of(Drug.PARACETAMOL);
     ParacetamolRule paracetamolRule = new ParacetamolRule();
@@ -69,7 +67,7 @@ class ParacetamolRuleTest {
     ParacetamolRule paracetamolRule = new ParacetamolRule();
 
     // When
-    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);  
+    HealthState newHealthState = paracetamolRule.apply(currentHealthState, drugs);
 
     // Then
     assertEquals(currentHealthState, newHealthState);

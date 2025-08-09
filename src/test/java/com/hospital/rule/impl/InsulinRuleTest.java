@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
@@ -42,9 +42,7 @@ class InsulinRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "FEVER", "DIABETES", "TUBERCULOSIS", "DEAD"
-  })
+  @EnumSource(HealthState.class)
   void testApplyWhenInsulinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of();
@@ -58,10 +56,8 @@ class InsulinRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "FEVER", "TUBERCULOSIS", "DEAD"
-  })
-  void testApplyWhenHealthStateIsNotDiabatesAndOnlyInsulinIsGivenShouldNotChangeHealthState(
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "FEVER", "TUBERCULOSIS", "DEAD" })
+  void testApplyWhenHealthStateIsNotDiabetesAndOnlyInsulinIsGivenShouldNotChangeHealthState(
       HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of(Drug.INSULIN);

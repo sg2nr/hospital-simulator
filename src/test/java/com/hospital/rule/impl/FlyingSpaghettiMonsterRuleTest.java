@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
 import com.hospital.domain.Drug;
@@ -50,9 +50,7 @@ class FlyingSpaghettiMonsterRuleTest {
   }
 
   @ParameterizedTest
-  @CsvSource({
-      "HEALTHY", "FEVER", "TUBERCULOSIS", "DIABETES"
-  })
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "FEVER", "TUBERCULOSIS", "DIABETES" })
   void testApplyWhenHealthStateIsNotDeadAndFlyingSpaghettiMonsterDoesNotResurrectShouldNotChangeHealthState(
       HealthState currentHealthState) {
     // Given
