@@ -6,21 +6,21 @@ import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
 import com.hospital.rule.Rule;
 
-public class InsulinRule implements Rule {
+public class ParacetamolRule implements Rule {
 
   @Override
   public HealthState apply(HealthState currenHealthState, Set<Drug> drugs) {
 
-    if (drugs.contains(Drug.INSULIN)) {
-      if (currenHealthState == HealthState.HEALTHY && drugs.contains(Drug.ANTIBIOTIC)) {
-        return HealthState.FEVER;
+    if (drugs.contains(Drug.PARACETAMOL)) {
+
+      if (drugs.contains(Drug.ASPIRIN)) {
+        return HealthState.DEAD;
       }
 
-      if (currenHealthState == HealthState.DIABETES) {
-        return HealthState.DIABETES;
+      if (currenHealthState == HealthState.FEVER) {
+        return HealthState.HEALTHY;
       }
     }
-
     return currenHealthState;
   }
 }

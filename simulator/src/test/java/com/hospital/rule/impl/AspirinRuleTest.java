@@ -14,7 +14,7 @@ import com.hospital.domain.HealthState;
 class AspirinRuleTest {
 
   @Test
-  void testApplyWhenHealthStateIsFeverAndAspirinIsGiven() {
+  void testApplyWhenHealthStateIsFeverAndAspirinIsGivenShouldReturnHealthy() {
     // Given
     HealthState currentHealthState = HealthState.FEVER;
     Set<Drug> drugs = Set.of(Drug.ASPIRIN);
@@ -32,6 +32,20 @@ class AspirinRuleTest {
   void testApplyWhenHealthStateIsNotFeverShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of(Drug.ASPIRIN);
+    AspirinRule aspirinRule = new AspirinRule();
+
+    // When
+    HealthState newHealthState = aspirinRule.apply(currentHealthState, drugs);
+
+    // Then
+    assertEquals(currentHealthState, newHealthState);
+  }
+
+  @ParameterizedTest
+  @CsvSource({ "HEALTHY", "FEVER", "TUBERCULOSIS", "DIABETES", "DEAD" })
+  void testApplyWhenAspirinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
+    // Given
+    Set<Drug> drugs = Set.of();
     AspirinRule aspirinRule = new AspirinRule();
 
     // When

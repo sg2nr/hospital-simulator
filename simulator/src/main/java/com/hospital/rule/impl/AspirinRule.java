@@ -15,5 +15,4 @@ public class AspirinRule implements Rule {
     }
     return currenHealthState;
   }
-
 }
