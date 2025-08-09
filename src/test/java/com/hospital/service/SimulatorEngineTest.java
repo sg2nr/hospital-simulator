@@ -23,7 +23,7 @@ class SimulatorEngineTest {
 
   // From example #1
   @Test
-  void testSimulateWhenAllRulesAreAppliedToTwoDiabetesAndNoDrugsShouldReturnTwoDiabetes() {
+  void testSimulateWhenTwoDiabetesDontGetInsulinShouldReturnTwoDead() {
     // Given
     SimulationRequest request = new SimulationRequest(Map.of(HealthState.DIABETES, 2), Set.of());
 
@@ -44,7 +44,7 @@ class SimulatorEngineTest {
 
   // From example #2
   @Test
-  void testSimulateWhenAllRulesAreAppliedToOneFeverAndParacetamolShouldReturnOneHealthy() {
+  void testSimulateWhenOnePatientWithFeveGetParacetamolShouldReturnOneHealthy() {
     // Given
     SimulationRequest request = new SimulationRequest(Map.of(HealthState.FEVER, 1), Set.of(Drug.PARACETAMOL));
 
@@ -65,7 +65,7 @@ class SimulatorEngineTest {
 
   // From example #3
   @Test
-  void testSimulateWhenAllRulesAreAppliedToTuberculosisAndFeverAndDiabetesAndAntibioticAndInsulinShouldReturnTwoFeverAndOneDiabetes() {
+  void testSimulateAntibioticCuresTuberculosisButInsulinCausesHealthyPatientsToGetFever() {
     // Given
     SimulationRequest request = new SimulationRequest(
         Map.of(HealthState.TUBERCULOSIS, 1, HealthState.FEVER, 1, HealthState.DIABETES, 1),
@@ -87,7 +87,7 @@ class SimulatorEngineTest {
   }
 
   @Test
-  void testSimulateWhenAllRulesAreAppliedToHealthyAndTuberculosisAndFeverAndDiabetesAndAntibioticAndInsulinShouldReturnThreeFeverAndOneDiabetes() {
+  void testSimulateInsulinAntibioticMixedEffects() {
     // Given
     SimulationRequest request = new SimulationRequest(
         Map.of(HealthState.TUBERCULOSIS, 1, HealthState.FEVER, 1, HealthState.DIABETES, 1, HealthState.HEALTHY, 1),
