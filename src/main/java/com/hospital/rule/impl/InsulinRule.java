@@ -19,7 +19,14 @@ public class InsulinRule implements Rule {
           .build();
     }
 
+    if (drugs.contains(Drug.INSULIN)) {
+      return HealthStateMapBuilder.from(patientsByState)
+          .build();
+    }
+
+    int diabetesCount = patientsByState.getOrDefault(HealthState.DIABETES, 0);
     return HealthStateMapBuilder.from(patientsByState)
-            .build();
+        .transition(HealthState.DIABETES, HealthState.DEAD, diabetesCount)
+        .build();
   }
 }

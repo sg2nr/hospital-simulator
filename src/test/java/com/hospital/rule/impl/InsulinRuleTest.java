@@ -31,6 +31,22 @@ class InsulinRuleTest {
   }
 
   @Test
+  void testApplyWhenAllPatientsHaveDiabetesAndInsulinIsNotGivenShouldReturnAllDead() {
+    // Given
+    int diabetesCount = 1_000;
+    Set<Drug> drugs = Set.of();
+    Map<HealthState, Integer> initialCounts = Map.of(HealthState.DIABETES, diabetesCount);
+
+    // When
+    InsulinRule insulinRule = new InsulinRule();
+    Map<HealthState, Integer> result = insulinRule.apply(initialCounts, drugs);
+
+    // Then
+    assertEquals(0, result.get(HealthState.DIABETES));
+    assertEquals(diabetesCount, result.get(HealthState.DEAD));
+  }
+
+  @Test
   void testApplyWhenAllPatientsAreHealthyAndInsulinAndAntibioticAreGivenShouldReturnAllFever() {
     // Given
     int healthyCount = 15_000;
@@ -47,7 +63,7 @@ class InsulinRuleTest {
   }
 
   @ParameterizedTest
-  @EnumSource(HealthState.class)
+  @EnumSource(value = HealthState.class, names = { "HEALTHY", "FEVER", "TUBERCULOSIS", "DEAD" })
   void testApplyWhenInsulinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     int count = 10_000;
