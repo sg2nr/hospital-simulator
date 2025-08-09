@@ -45,9 +45,26 @@ class InsulinRuleTest {
   @CsvSource({
       "HEALTHY", "FEVER", "DIABETES", "TUBERCULOSIS", "DEAD"
   })
-  void testApplyWhenInsulinIsNoGivenShouldNotChangeHealthState(HealthState currentHealthState) {
+  void testApplyWhenInsulinIsNotGivenShouldNotChangeHealthState(HealthState currentHealthState) {
     // Given
     Set<Drug> drugs = Set.of();
+    InsulinRule insulinRule = new InsulinRule();
+
+    // When
+    HealthState newHealthState = insulinRule.apply(currentHealthState, drugs);
+
+    // Then
+    assertEquals(currentHealthState, newHealthState);
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+      "HEALTHY", "FEVER", "TUBERCULOSIS", "DEAD"
+  })
+  void testApplyWhenHealthStateIsNotDiabatesAndOnlyInsulinIsGivenShouldNotChangeHealthState(
+      HealthState currentHealthState) {
+    // Given
+    Set<Drug> drugs = Set.of(Drug.INSULIN);
     InsulinRule insulinRule = new InsulinRule();
 
     // When
