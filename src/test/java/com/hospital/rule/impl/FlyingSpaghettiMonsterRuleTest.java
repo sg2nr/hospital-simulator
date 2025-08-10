@@ -67,4 +67,21 @@ class FlyingSpaghettiMonsterRuleTest {
     assertEquals(count, result.get(currentHealthState));
     assertEquals(0, result.get(HealthState.DEAD));
   }
+
+  @Test
+  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+    // Given
+    Map<HealthState, Integer> initialCounts = Map.of();
+
+    // When
+    FlyingSpaghettiMonsterRule rule = new FlyingSpaghettiMonsterRule();
+    Map<HealthState, Integer> result = rule.apply(initialCounts, Set.of());
+
+    // Then
+    assertEquals(0, result.getOrDefault(HealthState.HEALTHY, 0));
+    assertEquals(0, result.getOrDefault(HealthState.DEAD, 0));
+    assertEquals(0, result.getOrDefault(HealthState.FEVER, 0));
+    assertEquals(0, result.getOrDefault(HealthState.TUBERCULOSIS, 0));
+    assertEquals(0, result.getOrDefault(HealthState.DIABETES, 0));
+  }
 }

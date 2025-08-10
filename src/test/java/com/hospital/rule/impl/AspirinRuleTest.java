@@ -65,4 +65,22 @@ class AspirinRuleTest {
     assertEquals(count, result.get(currentHealthState));
     assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
+
+  @Test
+  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+    // Given
+    Map<HealthState, Integer> initialCounts = Map.of();
+    Set<Drug> drugs = Set.of(Drug.ASPIRIN);
+
+    // When
+    AspirinRule aspirinRule = new AspirinRule();
+    Map<HealthState, Integer> result = aspirinRule.apply(initialCounts, drugs);
+
+    // Then
+    assertEquals(0, result.getOrDefault(HealthState.HEALTHY, 0));
+    assertEquals(0, result.getOrDefault(HealthState.FEVER, 0));
+    assertEquals(0, result.getOrDefault(HealthState.DIABETES, 0));
+    assertEquals(0, result.getOrDefault(HealthState.TUBERCULOSIS, 0));
+    assertEquals(0, result.getOrDefault(HealthState.DEAD, 0));
+  }
 }

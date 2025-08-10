@@ -81,4 +81,21 @@ class ParacetamolRuleTest {
     assertEquals(count, result.get(currentHealthState));
     assertEquals(count, result.values().stream().mapToInt(Integer::intValue).sum());
   }
+
+  @Test
+  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+    // Given
+    Map<HealthState, Integer> initialCounts = Map.of();
+    Set<Drug> drugs = Set.of(Drug.PARACETAMOL);
+
+    // When
+    ParacetamolRule paracetamolRule = new ParacetamolRule();
+    Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
+
+    // Then
+    assertEquals(0, result.getOrDefault(HealthState.HEALTHY, 0));
+    assertEquals(0, result.getOrDefault(HealthState.FEVER, 0));
+    assertEquals(0, result.getOrDefault(HealthState.TUBERCULOSIS, 0));
+    assertEquals(0, result.getOrDefault(HealthState.DIABETES, 0));
+  }  
 }
