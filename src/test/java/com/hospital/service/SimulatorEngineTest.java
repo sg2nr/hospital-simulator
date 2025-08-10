@@ -23,7 +23,7 @@ class SimulatorEngineTest {
 
   // From example #1
   @Test
-  void testSimulateWhenTwoDiabetesDontGetInsulinShouldReturnTwoDead() {
+  void testSimulateWhenTwoDiabetesDoNotGetInsulinShouldReturnTwoDead() {
     // Given
     SimulationRequest request = new SimulationRequest(Map.of(HealthState.DIABETES, 2), Set.of());
 
@@ -44,7 +44,7 @@ class SimulatorEngineTest {
 
   // From example #2
   @Test
-  void testSimulateWhenOnePatientWithFeveGetParacetamolShouldReturnOneHealthy() {
+  void testSimulateWhenOnePatientWithFeverGetParacetamolShouldReturnOneHealthy() {
     // Given
     SimulationRequest request = new SimulationRequest(Map.of(HealthState.FEVER, 1), Set.of(Drug.PARACETAMOL));
 

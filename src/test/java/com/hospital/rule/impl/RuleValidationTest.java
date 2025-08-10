@@ -80,11 +80,9 @@ class RuleValidationTest {
   @ParameterizedTest
   @MethodSource("allRules")
   void testApplyWhenAllPatientsByStateIsNullAndDrugsAreNullShouldThrowException(Rule rule) {
-    Map<HealthState, Integer> patientsByState = null;
-    Set<Drug> drugs = null;
     IllegalArgumentException exception = assertThrows(
         IllegalArgumentException.class,
-        () -> rule.apply(patientsByState, drugs));
+        () -> rule.apply(null, null));
 
     String expectedMessage = """
         Information about patients health state cannot be null.

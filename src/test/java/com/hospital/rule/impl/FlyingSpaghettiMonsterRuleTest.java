@@ -69,7 +69,7 @@ class FlyingSpaghettiMonsterRuleTest {
   }
 
   @Test
-  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+  void testApplyWhenPatientsByStateIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
     // Given
     Map<HealthState, Integer> initialCounts = Map.of();
 

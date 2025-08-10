@@ -26,8 +26,7 @@ class AspirinRuleTest {
     Map<HealthState, Integer> result = aspirinRule.apply(initialCounts, drugs);
 
     // Then
-    int expectedHealthyCount = feverCount;
-    assertEquals(expectedHealthyCount, result.get(HealthState.HEALTHY));
+    assertEquals(feverCount, result.get(HealthState.HEALTHY));
     assertEquals(0, result.get(HealthState.FEVER));
   }
 
@@ -67,7 +66,7 @@ class AspirinRuleTest {
   }
 
   @Test
-  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+  void testApplyWhenPatientsByStateIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
     // Given
     Map<HealthState, Integer> initialCounts = Map.of();
     Set<Drug> drugs = Set.of(Drug.ASPIRIN);

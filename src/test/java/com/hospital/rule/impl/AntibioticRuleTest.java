@@ -1,7 +1,6 @@
 package com.hospital.rule.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +15,7 @@ import com.hospital.domain.HealthState;
 class AntibioticRuleTest {
 
   @Test
-  void testApplyWhenAllPatientsHaveTubercolisAndAntiobioticIsGivenShouldReturnAllHealthy() {
+  void testApplyWhenAllPatientsHaveTuberculosisAndAntibioticIsGivenShouldReturnAllHealthy() {
     // Given
     int tuberculosisCount = 1_000;
     Map<HealthState, Integer> initialCounts = Map.of(HealthState.TUBERCULOSIS, tuberculosisCount);
@@ -27,8 +26,7 @@ class AntibioticRuleTest {
     Map<HealthState, Integer> result = antibioticRule.apply(initialCounts, drugs);
 
     // Then
-    int expectedHealthyCount = tuberculosisCount;
-    assertEquals(expectedHealthyCount, result.get(HealthState.HEALTHY));
+    assertEquals(tuberculosisCount, result.get(HealthState.HEALTHY));
     assertEquals(0, result.get(HealthState.TUBERCULOSIS));
   }
 
@@ -66,7 +64,7 @@ class AntibioticRuleTest {
   }
 
   @Test
-  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+  void testApplyWhenPatientsByStateIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
     // Given
     Map<HealthState, Integer> initialCounts = Map.of();
     Set<Drug> drugs = Set.of(Drug.ANTIBIOTIC);

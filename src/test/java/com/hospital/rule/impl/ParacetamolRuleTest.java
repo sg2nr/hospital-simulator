@@ -26,8 +26,7 @@ class ParacetamolRuleTest {
     Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
 
     // Then
-    int expectedHealthyCount = feverCount;
-    assertEquals(expectedHealthyCount, result.get(HealthState.HEALTHY));
+    assertEquals(feverCount, result.get(HealthState.HEALTHY));
     assertEquals(0, result.get(HealthState.FEVER));
   }
 
