@@ -1,6 +1,7 @@
 package com.hospital.rule.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 import java.util.Set;
@@ -80,5 +81,5 @@ class AntibioticRuleTest {
     assertEquals(0, result.getOrDefault(HealthState.FEVER, 0));
     assertEquals(0, result.getOrDefault(HealthState.DIABETES, 0));
     assertEquals(0, result.getOrDefault(HealthState.DEAD, 0));
-  }
+  }  
 }

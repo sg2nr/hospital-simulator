@@ -8,6 +8,7 @@ import com.hospital.domain.HealthState;
 import com.hospital.rule.BinomialSampler;
 import com.hospital.rule.Rule;
 import com.hospital.rule.impl.utils.HealthStateMapBuilder;
+import com.hospital.rule.impl.utils.RuleValidationUtils;
 
 public class FlyingSpaghettiMonsterRule implements Rule {
 
@@ -25,6 +26,7 @@ public class FlyingSpaghettiMonsterRule implements Rule {
 
   @Override
   public Map<HealthState, Integer> apply(Map<HealthState, Integer> patientsByState, Set<Drug> drugs) {
+    RuleValidationUtils.validateRulePreconditions(patientsByState, drugs);
     int deadCount = patientsByState.getOrDefault(HealthState.DEAD, 0);   
 
     if (deadCount == 0) {

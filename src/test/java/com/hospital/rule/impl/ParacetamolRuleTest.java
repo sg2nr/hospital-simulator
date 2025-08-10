@@ -83,7 +83,7 @@ class ParacetamolRuleTest {
   }
 
   @Test
-  void testApplyWhenPatientsBySteteIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
+  void testApplyWhenPatientsByStateIsEmptyShouldReturnMapWithPatientsTotalCountAsZero() {
     // Given
     Map<HealthState, Integer> initialCounts = Map.of();
     Set<Drug> drugs = Set.of(Drug.PARACETAMOL);
