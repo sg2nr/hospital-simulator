@@ -1,6 +1,7 @@
 package com.hospital.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,10 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.hospital.client.model.SimulationRequest;
+import com.hospital.client.model.SimulationResponse;
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
-import com.hospital.domain.SimulationRequest;
-import com.hospital.domain.SimulationResponse;
 import com.hospital.rule.Rule;
 import com.hospital.rule.impl.AntibioticRule;
 import com.hospital.rule.impl.AspirinRule;
@@ -107,4 +108,21 @@ class SimulatorEngineTest {
     assertEquals(0, response.patientsByState().get(HealthState.TUBERCULOSIS));
     assertEquals(0, response.patientsByState().get(HealthState.DEAD));
   }
+
+  @Test
+  void testSimulateWithNullRequestShouldThrowException() {
+    // Given
+    SimulationRequest request = null;
+
+    List<Rule> rules = List.of(new AspirinRule(), new AntibioticRule(), new InsulinRule(), new ParacetamolRule(),
+        new FlyingSpaghettiMonsterRule());
+    SimulatorEngine simulatorEngine = new SimulatorEngine(rules);
+
+    // When
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> simulatorEngine.simulate(request));
+
+    // Then
+    assertEquals("Simulation request cannot be null.", exception.getMessage());
+  }    
 }

@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hospital.client.model.SimulationRequest;
+import com.hospital.client.model.SimulationResponse;
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
-import com.hospital.domain.SimulationRequest;
-import com.hospital.domain.SimulationResponse;
 import com.hospital.rule.Rule;
 
 /**
  * SimulatorEngine is responsible for simulating the application of rules
  * to a set of patients based on their health states and the drugs administered.
  * 
- * <p>Rules are applied sequentially in the order provided. The output of each rule
+ * <p>
+ * Rules are applied sequentially in the order provided. The output of each rule
  * becomes the input for the next rule, which means rule order can significantly
  * affect the final outcome.
  * 
@@ -30,10 +31,13 @@ public class SimulatorEngine {
 
   /**
    * This method performs the simulation based on the given request.
+   * 
    * @param request the simulation request containing initial patients and drugs
-   * @return SimulationResponse containing the final state of patients after applying all rules
+   * @return SimulationResponse containing the final state of patients after
+   *         applying all rules
    */
   public SimulationResponse simulate(SimulationRequest request) {
+    validateRequest(request);
 
     Map<HealthState, Integer> patientsByState = new EnumMap<>(request.initialPatients());
     Set<Drug> drugs = request.drugs();
@@ -43,5 +47,15 @@ public class SimulatorEngine {
     }
 
     return new SimulationResponse(patientsByState);
+  }
+
+  private void validateRequest(SimulationRequest request) {
+    if (request == null) {
+      throw new IllegalArgumentException("Simulation request cannot be null.");
+    }
+
+    if (request.initialPatients() == null || request.initialPatients().isEmpty()) {
+      throw new IllegalArgumentException("Simulation request must contain patients information.");
+    }
   }
 }
