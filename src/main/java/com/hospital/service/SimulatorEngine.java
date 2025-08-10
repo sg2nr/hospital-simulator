@@ -53,9 +53,5 @@ public class SimulatorEngine {
     if (request == null) {
       throw new IllegalArgumentException("Simulation request cannot be null.");
     }
-
-    if (request.initialPatients() == null || request.initialPatients().isEmpty()) {
-      throw new IllegalArgumentException("Simulation request must contain patients information.");
-    }
   }
 }
