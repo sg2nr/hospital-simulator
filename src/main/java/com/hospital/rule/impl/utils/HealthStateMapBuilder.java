@@ -35,7 +35,7 @@ public class HealthStateMapBuilder {
    * @param fromState the health state to transition from
    * @param toState   the health state to transition to
    * @param count     the number of patients to transition
-   * @return
+   * @return the HealthStateMapBuilder instance for method chaining
    */
   public HealthStateMapBuilder transition(HealthState fromState, HealthState toState, int count) {
     if (count > 0) {
