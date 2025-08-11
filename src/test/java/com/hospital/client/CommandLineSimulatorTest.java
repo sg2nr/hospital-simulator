@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.Parameter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -26,7 +25,7 @@ import com.hospital.rule.impl.ParacetamolRule;
 class CommandLineSimulatorTest {
 
   @ParameterizedTest
-  @MethodSource("provideSimulationArgumentsAndRresults")
+  @MethodSource("provideSimulationArgumentsAndResults")
   void testCommandLineSimulation(String[] args, String expectedOutput) {
     // Given
     BinomialSampler binomialSampler = Mockito.mock(BinomialSampler.class);
@@ -48,15 +47,23 @@ class CommandLineSimulatorTest {
     assertEquals(expectedOutput, result);
   }
 
-  static Stream<Arguments> provideSimulationArgumentsAndRresults() {
+  static Stream<Arguments> provideSimulationArgumentsAndResults() {
     return Stream.of(
+        // Example 1: Two patients with diabetes, no drugs
         Arguments.of(new String[] { "D,D" }, "F:0,H:0,D:0,T:0,X:2"),
+        // Example 2: One patient with fever, given paracetamol
         Arguments.of(new String[] { "F", "P" }, "F:0,H:1,D:0,T:0,X:0"),
-        Arguments.of(new String[] { "T,F,D", "An,I" }, "F:2,H:0,D:1,T:0,X:0"));
+        // Example 3: One patient with tuberculosis, given antibiotic
+        Arguments.of(new String[] { "T,F,D", "An,I" }, "F:2,H:0,D:1,T:0,X:0"),
+        // More complex case with multiple states and drugs
+        Arguments.of(new String[] { "F,F,H,D,T", "P,An" }, "F:0,H:4,D:0,T:0,X:1"),
+        Arguments.of(new String[] { "F,D,T,H,X", "P,An,I" }, "F:0,H:3,D:1,T:0,X:1"),
+        Arguments.of(new String[] { "H,H,H,H,H", "As,P,An,I" }, "F:0,H:0,D:0,T:0,X:5"),
+        Arguments.of(new String[] { "H,H,H,H,H,F,D,D,D,T,T", "As,P,An,I" }, "F:0,H:0,D:0,T:0,X:11"));
   }
 
   @Test
-  void testCommandLineSimulatorWithNoArgumentsShouldThrowException() {    
+  void testCommandLineSimulatorWithNoArgumentsShouldThrowException() {
     // Given
     CommandLineSimulator cli = new CommandLineSimulator(List.of(
         new AspirinRule(),
