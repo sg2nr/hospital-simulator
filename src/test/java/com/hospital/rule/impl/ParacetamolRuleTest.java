@@ -92,9 +92,9 @@ class ParacetamolRuleTest {
     Map<HealthState, Integer> result = paracetamolRule.apply(initialCounts, drugs);
 
     // Then
-    assertEquals(0, result.getOrDefault(HealthState.HEALTHY, 0));
-    assertEquals(0, result.getOrDefault(HealthState.FEVER, 0));
-    assertEquals(0, result.getOrDefault(HealthState.TUBERCULOSIS, 0));
-    assertEquals(0, result.getOrDefault(HealthState.DIABETES, 0));
+    assertEquals(0, result.get(HealthState.HEALTHY));
+    assertEquals(0, result.get(HealthState.FEVER));
+    assertEquals(0, result.get(HealthState.TUBERCULOSIS));
+    assertEquals(0, result.get(HealthState.DIABETES));
   }  
 }
