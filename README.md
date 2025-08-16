@@ -2,7 +2,7 @@
 
 A Java application that simulates patient health state transitions in a hospital environment based on initial patient conditions and administered drugs.
 
-## 📋 Table of Contents
+## Table of Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
