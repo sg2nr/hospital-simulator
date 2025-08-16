@@ -27,17 +27,17 @@ public class CommandLineSimulator {
 
   private final SimulatorEngine simulatorEngine;
 
-  public CommandLineSimulator(List<Rule> rules) {
-    this.simulatorEngine = new SimulatorEngine(rules);
+  public CommandLineSimulator(SimulatorEngine simulatorEngine) {
+    this.simulatorEngine = simulatorEngine;
   }
 
   public static void main(String[] args) {
-    CommandLineSimulator cli = new CommandLineSimulator(List.of(
+    CommandLineSimulator cli = new CommandLineSimulator(new SimulatorEngine(List.of(
         new AspirinRule(),
         new AntibioticRule(),
         new InsulinRule(),
         new ParacetamolRule(),
-        new FlyingSpaghettiMonsterRule()));
+        new FlyingSpaghettiMonsterRule())));
 
     try {
       String result = cli.run(args);

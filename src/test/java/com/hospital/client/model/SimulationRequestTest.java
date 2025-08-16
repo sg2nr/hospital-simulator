@@ -14,6 +14,20 @@ import com.hospital.domain.HealthState;
 class SimulationRequestTest {
 
   @Test
+  void testCreateSimulationRequestWithValidPatientsAndDrugsShouldReturnASimulationRequest() {
+    // Given
+    Map<HealthState, Integer> initialPatients = Map.of(HealthState.HEALTHY, 10);
+    Set<Drug> drugs = Set.of(Drug.ANTIBIOTIC, Drug.ASPIRIN);
+
+    // When
+    SimulationRequest request = new SimulationRequest(initialPatients, drugs);
+
+    // Then
+    assertEquals(drugs, request.drugs());
+    assertEquals(10, request.initialPatients().get(HealthState.HEALTHY));
+  }
+
+  @Test
   void testCreateSimulationRequestWithNullInitialPatientsShouldThrowException() {
     // Given
     Map<HealthState, Integer> initialPatients = null;

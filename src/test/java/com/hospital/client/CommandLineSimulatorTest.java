@@ -15,12 +15,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import com.hospital.rule.BinomialSampler;
-import com.hospital.rule.Rule;
 import com.hospital.rule.impl.AntibioticRule;
 import com.hospital.rule.impl.AspirinRule;
 import com.hospital.rule.impl.FlyingSpaghettiMonsterRule;
 import com.hospital.rule.impl.InsulinRule;
 import com.hospital.rule.impl.ParacetamolRule;
+import com.hospital.service.SimulatorEngine;
 
 class CommandLineSimulatorTest {
 
@@ -31,14 +31,14 @@ class CommandLineSimulatorTest {
     BinomialSampler binomialSampler = Mockito.mock(BinomialSampler.class);
     Mockito.when(binomialSampler.sample(anyInt(), anyDouble())).thenReturn(0);
 
-    List<Rule> rules = List.of(
+    SimulatorEngine simulatorEngine = new SimulatorEngine(List.of(
         new AspirinRule(),
         new AntibioticRule(),
         new InsulinRule(),
         new ParacetamolRule(),
-        new FlyingSpaghettiMonsterRule(binomialSampler));
+        new FlyingSpaghettiMonsterRule()));
 
-    CommandLineSimulator simulator = new CommandLineSimulator(rules);
+    CommandLineSimulator simulator = new CommandLineSimulator(simulatorEngine);
 
     // When
     String result = simulator.run(args);
@@ -65,12 +65,13 @@ class CommandLineSimulatorTest {
   @Test
   void testCommandLineSimulatorWithNoArgumentsShouldThrowException() {
     // Given
-    CommandLineSimulator cli = new CommandLineSimulator(List.of(
+    SimulatorEngine simulatorEngine = new SimulatorEngine(List.of(
         new AspirinRule(),
         new AntibioticRule(),
         new InsulinRule(),
         new ParacetamolRule(),
         new FlyingSpaghettiMonsterRule()));
+    CommandLineSimulator cli = new CommandLineSimulator(simulatorEngine);
 
     // When
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> cli.run(new String[] {}));
