@@ -23,6 +23,6 @@ public enum HealthState {
       if (state.code.equalsIgnoreCase(code))
         return state;
     }
-    throw new IllegalArgumentException("Invalid state: " + code);
+    throw new IllegalArgumentException("Invalid Health State: " + code);
   }
 }

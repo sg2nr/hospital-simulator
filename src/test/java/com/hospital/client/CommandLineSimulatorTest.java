@@ -80,4 +80,42 @@ class CommandLineSimulatorTest {
     assertEquals("No arguments provided for simulation.\nUsage: java -jar hospital-simulator.jar <patients> [<drugs>]",
         exception.getMessage());
   }
+
+  @Test
+  void testCommandLineSimulatorWithUnknownDrugShouldThrowIllegalArgumentException() {
+    // Given
+    SimulatorEngine simulatorEngine = new SimulatorEngine(List.of(
+        new AspirinRule(),
+        new AntibioticRule(),
+        new InsulinRule(),
+        new ParacetamolRule(),
+        new FlyingSpaghettiMonsterRule()));
+    CommandLineSimulator cli = new CommandLineSimulator(simulatorEngine);
+
+    // When
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> cli.run(new String[] { "F", "new_drug" }));
+
+    // Then
+    assertEquals("Unknown drug: new_drug", exception.getMessage());
+  }
+
+  @Test
+  void testCommandLineSimulatorWithInvalidHealthStateShouldThrowIllegalArgumentException() {
+    // Given
+    SimulatorEngine simulatorEngine = new SimulatorEngine(List.of(
+        new AspirinRule(),
+        new AntibioticRule(),
+        new InsulinRule(),
+        new ParacetamolRule(),
+        new FlyingSpaghettiMonsterRule()));
+    CommandLineSimulator cli = new CommandLineSimulator(simulatorEngine);
+
+    // When
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> cli.run(new String[] { "F, New_HealthState", "P" }));
+
+    // Then
+    assertEquals("Invalid Health State: New_HealthState", exception.getMessage());
+  }
 }

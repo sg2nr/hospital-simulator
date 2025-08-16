@@ -11,7 +11,6 @@ import com.hospital.client.model.SimulationRequest;
 import com.hospital.client.model.SimulationResponse;
 import com.hospital.domain.Drug;
 import com.hospital.domain.HealthState;
-import com.hospital.rule.Rule;
 import com.hospital.rule.impl.AntibioticRule;
 import com.hospital.rule.impl.AspirinRule;
 import com.hospital.rule.impl.FlyingSpaghettiMonsterRule;
