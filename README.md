@@ -238,7 +238,7 @@ Build automation and dependency management are handled with Maven. The `maven-sh
 
 Provides reliable mathematical and statistical utilities (e.g., probability distributions), reducing the need for custom implementations and ensuring correctness in simulation logic.
 
-## 🤝 Development
+## Development
 
 ### Adding New Drugs
 1. Create a new rule class implementing `Rule` interface
@@ -254,7 +254,7 @@ Provides reliable mathematical and statistical utilities (e.g., probability dist
 
 ---
 
-## 📧 Contact
+## Contact
 
 For any questions about this implementation, please feel free to reach out.
 
