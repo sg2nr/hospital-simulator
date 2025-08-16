@@ -19,7 +19,7 @@ The Hospital Simulator processes patients with various health conditions and sim
 - **I** - Insulin
 - **P** - Paracetamol
 
-## 🔧 Prerequisites
+## Prerequisites
 
 - **Java 21** or higher
 - **Maven 3.6.3** or higher
