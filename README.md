@@ -2,6 +2,14 @@
 
 A Java application that simulates patient health state transitions in a hospital environment based on initial patient conditions and administered drugs.
 
+## 📋 Table of Contents
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Usage Examples](#usage-examples)
+- [Design Decisions & Assumptions](#design-decisions--assumptions)
+- [Development](#development)
+
 ## Overview
 
 The Hospital Simulator processes patients with various health conditions and simulates how their states change when different drugs are administered. The application follows a rule-based system where each drug has specific effects on patient health states.
