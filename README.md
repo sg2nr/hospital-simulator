@@ -242,6 +242,10 @@ Build automation and dependency management are handled with Maven.
 * **JUnit 5**: Provides the testing framework, with parameterized tests used to validate rules and scenarios across multiple inputs.
 * **Mockito**: Enables mocking of probabilistic behaviors and isolating dependencies, ensuring deterministic unit tests.
 
+#### SLF4J
+
+Provides a simple and standardized logging API. The slf4j-simple implementation is used to log simulation events, including executed rules and intermediate patient states, helping with debugging
+
 #### Apache Commons Math
 
 Provides reliable mathematical and statistical utilities (e.g., probability distributions), reducing the need for custom implementations and ensuring correctness in simulation logic.

@@ -4,6 +4,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hospital.client.model.SimulationRequest;
 import com.hospital.client.model.SimulationResponse;
@@ -22,6 +24,8 @@ import com.hospital.rule.Rule;
  * 
  */
 public class SimulatorEngine {
+
+  private static final Logger log = LoggerFactory.getLogger(SimulatorEngine.class);
 
   private final List<Rule> rules;
 
@@ -42,10 +46,16 @@ public class SimulatorEngine {
     Map<HealthState, Integer> patientsByState = new EnumMap<>(request.initialPatients());
     Set<Drug> drugs = request.drugs();
 
+    log.info("Starting simulation with initial patients: {} and drugs: {}", patientsByState, drugs);
+
     for (Rule rule : rules) {
+      log.info("Applying rule: {}", rule.getClass().getSimpleName());
       patientsByState = rule.apply(patientsByState, drugs);
+      log.debug("State after {}: {}", rule.getClass().getSimpleName(), patientsByState);
     }
 
+    log.info("Simulation finished. Final patients state: {}", patientsByState);
+    
     return new SimulationResponse(patientsByState);
   }
 
