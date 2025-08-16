@@ -125,28 +125,28 @@ java -jar target/hospital-simulator.jar F,F O
 
 ### Assumptions
 
-1. **Single Health State per Patient**
-   Each patient can only be in one health state at a time. States are mutually exclusive (`FEVER`, `HEALTHY`, `DIABETES`, `TUBERCULOSIS`, `DEAD`).
+#### Single Health State per Patient
+Each patient can only be in one health state at a time. States are mutually exclusive (`FEVER`, `HEALTHY`, `DIABETES`, `TUBERCULOSIS`, `DEAD`).
 
-2. **Simultaneous Drug Application**
-   All drugs are applied simultaneously. For example, if a patient has `FEVER` and the input includes both `ASPIRIN` and `PARACETAMOL`, the combined effect is resolved in a single simulation step.
+#### Simultaneous Drug Application
+All drugs are applied simultaneously. For example, if a patient has `FEVER` and the input includes both `ASPIRIN` and `PARACETAMOL`, the combined effect is resolved in a single simulation step.
 
-3. **Order Independence**
-   The order of drugs in the input does not affect the outcome (`ASPIRIN,PARACETAMOL` == `PARACETAMOL,ASPIRIN`).
+#### Order Independence
+The order of drugs in the input does not affect the outcome (`ASPIRIN,PARACETAMOL` == `PARACETAMOL,ASPIRIN`).
 
-4. **Rule Conflicts**
-   When multiple rules may apply, they are processed in a **deterministic order** (the engine applies rules in the order in which they are registered).
+#### Rule Conflicts
+When multiple rules may apply, they are processed in a **deterministic order** (the engine applies rules in the order in which they are registered).
 
 ### Core Decisions
 
-1. **Stateless Engine**
-   The simulation engine does not retain state between runs. Each simulation is self-contained and driven solely by its input.
+#### Stateless Engine
+The simulation engine does not retain state between runs. Each simulation is self-contained and driven solely by its input.
 
-2. **Probability-based Rules**
-   Some rules may rely on randomness (e.g., `FlyingSpaghettiMonsterRule` with a resurrection probability). To ensure deterministic testing, randomness is abstracted via the `BinomialSampler` interface, which can be mocked or replaced with a deterministic implementation.
+#### Probability-based Rules
+Some rules may rely on randomness (e.g., `FlyingSpaghettiMonsterRule` with a resurrection probability). To ensure deterministic testing, randomness is abstracted via the `BinomialSampler` interface, which can be mocked or replaced with a deterministic implementation.
 
-3. **Extensibility**
-   New health states or drugs can be introduced without modifying the simulation engine itself. Only new `Rule` implementations are required.
+#### Extensibility
+New health states or drugs can be introduced without modifying the simulation engine itself. Only new `Rule` implementations are required.
 
 ### Architectural Decisions
 
