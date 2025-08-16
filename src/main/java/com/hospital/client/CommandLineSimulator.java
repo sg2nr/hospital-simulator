@@ -18,6 +18,49 @@ import com.hospital.rule.impl.InsulinRule;
 import com.hospital.rule.impl.ParacetamolRule;
 import com.hospital.service.SimulatorEngine;
 
+/**
+ * Command-line interface for the hospital patient simulator.
+ * 
+ * <p>This class provides a command-line wrapper around the {@link SimulatorEngine}
+ * to simulate patient health state changes based on initial conditions and applied drugs.
+ * It handles argument parsing, delegates simulation to the engine, and formats the results
+ * for console output.
+ * 
+ * <h2>Usage</h2>
+ * <pre>
+ * java -jar hospital-simulator.jar &lt;patients&gt; [&lt;drugs&gt;]
+ * </pre>
+ * 
+ * <h3>Arguments</h3>
+ * <ul>
+ * <li><strong>patients</strong> (required): Comma-separated list of patient health state codes
+ *     (e.g., "F,H,D,T,X" for Fever, Healthy, Diabetes, Tuberculosis, Dead)</li>
+ * <li><strong>drugs</strong> (optional): Comma-separated list of drug codes to administer
+ *     (e.g., "As,An,I,P" for Aspirin, Antibiotic, Insulin, Paracetamol)</li>
+ * </ul>
+ * 
+ * <h3>Examples</h3>
+ * <pre>
+ * // Simulate 2 fever patients and 1 healthy patient with no drugs
+ * java -jar hospital-simulator.jar "F,F,H"
+ * 
+ * // Simulate patients with aspirin and antibiotic treatment
+ * java -jar hospital-simulator.jar "F,D,T" "As,An"
+ * </pre>
+ * 
+ * <h2>Output Format</h2>
+ * <p>Results are formatted as: {@code F:x,H:x,D:x,T:x,X:x} where:
+ * <ul>
+ * <li>F = Fever patients</li>
+ * <li>H = Healthy patients</li>
+ * <li>D = Diabetes patients</li>
+ * <li>T = Tuberculosis patients</li>
+ * <li>X = Dead patients</li>
+ * </ul>
+ * 
+ * @version 1.0
+ * @since 1.0
+ */
 public class CommandLineSimulator {
 
   private static final String NO_ARGUMENTS_ERROR_MESSAGE = """
