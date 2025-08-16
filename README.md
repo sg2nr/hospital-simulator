@@ -2,16 +2,7 @@
 
 A Java application that simulates patient health state transitions in a hospital environment based on initial patient conditions and administered drugs.
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Building the Project](#building-the-project)
-- [Running the Application](#running-the-application)
-- [Usage Examples](#usage-examples)
-- [Design Decisions & Assumptions](#design-decisions--assumptions)
-
-## 🎯 Overview
+## Overview
 
 The Hospital Simulator processes patients with various health conditions and simulates how their states change when different drugs are administered. The application follows a rule-based system where each drug has specific effects on patient health states.
 
@@ -31,7 +22,7 @@ The Hospital Simulator processes patients with various health conditions and sim
 ## 🔧 Prerequisites
 
 - **Java 21** or higher
-- **Maven 3.8.0** or higher
+- **Maven 3.6.3** or higher
 
 ### Verify Prerequisites
 ```bash
@@ -42,7 +33,7 @@ java -version
 mvn -version
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 mvn clean package
@@ -51,7 +42,7 @@ java -jar target/hospital-simulator.jar F,H,D As,An
 
 Expected output: `F:0,H:2,D:0,T:0,X:1`
 
-## 🏗️ Building the Project
+## Building the Project
 
 ### Full Build with Tests
 ```bash
@@ -66,7 +57,7 @@ mvn clean package -DskipTests
 ### Build Outputs
 - `target/hospital-simulator.jar` - Executable JAR (shaded with dependencies)
 
-## 🎮 Running the Application
+## Running the Application
 
 ### Command Syntax
 ```bash
@@ -85,7 +76,7 @@ Results are displayed as: `F:x,H:x,D:x,T:x,X:x` where:
 - **T** = Number of Tuberculosis patients
 - **X** = Number of Dead patients
 
-## 📚 Usage Examples
+## Usage Examples
 
 ### Basic Examples
 ```bash
@@ -130,8 +121,138 @@ java -jar target/hospital-simulator.jar F,F O
 # Output: Error: Unknown drug: O
 ```
 
-## 🧠 Design Decisions & Assumptions
-# TODO
+## Design Decisions & Assumptions
+
+### Assumptions
+
+1. **Single Health State per Patient**
+   Each patient can only be in one health state at a time. States are mutually exclusive (`FEVER`, `HEALTHY`, `DIABETES`, `TUBERCULOSIS`, `DEAD`).
+
+2. **Simultaneous Drug Application**
+   All drugs are applied simultaneously. For example, if a patient has `FEVER` and the input includes both `ASPIRIN` and `PARACETAMOL`, the combined effect is resolved in a single simulation step.
+
+3. **Order Independence**
+   The order of drugs in the input does not affect the outcome (`ASPIRIN,PARACETAMOL` == `PARACETAMOL,ASPIRIN`).
+
+4. **Rule Conflicts**
+   When multiple rules may apply, they are processed in a **deterministic order** (the engine applies rules in the order in which they are registered).
+
+### Core Decisions
+
+1. **Stateless Engine**
+   The simulation engine does not retain state between runs. Each simulation is self-contained and driven solely by its input.
+
+2. **Probability-based Rules**
+   Some rules may rely on randomness (e.g., `FlyingSpaghettiMonsterRule` with a resurrection probability). To ensure deterministic testing, randomness is abstracted via the `BinomialSampler` interface, which can be mocked or replaced with a deterministic implementation.
+
+3. **Extensibility**
+   New health states or drugs can be introduced without modifying the simulation engine itself. Only new `Rule` implementations are required.
+
+### Architectural Decisions
+
+#### Separation of Concerns
+
+The **business logic** is isolated from the **client layer** (currently a CLI). The `SimulatorEngine` can be integrated with other front-ends:
+
+* **Current**: Command-line interface (`CommandLineSimulator`)
+* **Future**: REST API controller, web UI, batch processor, etc.
+
+Any client only needs to send a `SimulationRequest` and handle a `SimulationResponse`.
+
+```
++--------+       +----------------+       +-------------+       +-----------+
+| Client | ----> | SimulatorEngine| ----> |   Rules     | ----> | Response  |
++--------+       +----------------+       +-------------+       +-----------+
+                      |                         ^
+                      | applies each Rule       |
+                      +-------------------------+
+```
+
+#### Rule-based Engine
+
+At the core of the design is the `Rule` interface:
+
+```java
+public interface Rule {
+    Map<HealthState, Integer> apply(Map<HealthState, Integer> patientsByState, Set<Drug> drugs);
+}
+```
+
+Each rule encapsulates a **single domain effect** (e.g., *Antibiotic cures Tuberculosis*, *Paracetamol + Aspirin kills all patients*).
+This makes the system easy to extend: new behaviors are added by implementing a `Rule` and registering it with the engine.
+
+#### Composition over Inheritance
+
+Rules are injected into the engine as a `List<Rule>`. The engine is agnostic to their concrete implementations; it simply executes them in sequence.
+This design follows the **Open/Closed Principle** and favors composition over inheritance.
+
+#### Strategy Pattern
+
+Rules are interchangeable strategies. The engine applies them consistently, without knowing their internal logic.
+
+#### Builder Pattern
+
+`HealthStateMapBuilder` is used to create fluent and readable state transitions, reducing boilerplate.
+
+#### Dependency Injection
+
+Rules can depend on external services or utilities. For instance, `FlyingSpaghettiMonsterRule` relies on `Apache Commons Math` via an injectable `BinomialSampler`.
+
+#### Testability
+
+* `Rule` is designed as a pure function: `(patientsByState, drugs) -> newPatientsByState`, making unit testing straightforward.
+* Probabilistic behavior is abstracted, enabling deterministic tests with mocks or stubs.
+* The engine can be tested end-to-end using sample inputs and expected outputs.
+
+### Error Handling
+
+* **Fail Fast**: Invalid inputs cause immediate termination with a clear error message.
+* **Validation**: Inputs are validated upfront through `RuleValidationUtils`, ensuring consistency and avoiding duplication.
+* **Precondition Checks**: Each rule verifies its inputs before applying logic.
+* **Logging**: Errors are written to `stderr`; results are written to `stdout`.
+
+### Future Extensions
+
+The architecture supports:
+
+* New **rules**, deterministic or probabilistic
+* New **clients** (REST API, GUI, batch processor)
+* New **simulation modes** (multi-day progression, scenarios, batch runs)
+
+### Technical Stack
+
+#### Java 21
+
+Modern language features such as records and pattern matching simplify rule definitions and improve readability. Its performance and long-term support ensure a stable foundation.
+
+#### Maven
+
+Build automation and dependency management are handled with Maven. The `maven-shade-plugin` is used to produce an executable fat JAR, ensuring portability without external dependencies.
+
+#### Testing
+
+* **JUnit 5**: Provides the testing framework, with parameterized tests used to validate rules and scenarios across multiple inputs.
+* **Mockito**: Enables mocking of probabilistic behaviors and isolating dependencies, ensuring deterministic unit tests.
+
+#### Apache Commons Math
+
+Provides reliable mathematical and statistical utilities (e.g., probability distributions), reducing the need for custom implementations and ensuring correctness in simulation logic.
+
+## 🤝 Development
+
+### Adding New Drugs
+1. Create a new rule class implementing `Rule` interface
+2. Add the rule to `CommandLineSimulator.main()` method
+3. Add corresponding tests
+4. Update documentation
+
+### Adding New Health States  
+1. Add enum value to `HealthState`
+2. Update `formatResponse()` method in `CommandLineSimulator`
+3. Add any necessary business rules
+4. Update tests and documentation
+
+---
 
 ## 📧 Contact
 
