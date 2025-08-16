@@ -215,9 +215,9 @@ Rules can depend on external services or utilities. For instance, `FlyingSpaghet
 
 The architecture supports:
 
-* New **rules**, deterministic or probabilistic
-* New **clients** (REST API, GUI, batch processor)
-* New **simulation modes** (multi-day progression, scenarios, batch runs)
+* New **rules**, deterministic or probabilistic;
+* New **clients** (REST API, GUI, batch processor);
+* New **simulation modes** (multi-day progression, scenarios, batch runs).
 
 ### Technical Stack
 
@@ -227,7 +227,7 @@ Modern language features such as records and pattern matching simplify rule defi
 
 #### Maven
 
-Build automation and dependency management are handled with Maven. The `maven-shade-plugin` is used to produce an executable fat JAR, ensuring portability without external dependencies.
+Build automation and dependency management are handled with Maven.
 
 #### Testing
 
