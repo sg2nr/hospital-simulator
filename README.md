@@ -220,14 +220,13 @@ Rules can depend on external services or utilities. For instance, `FlyingSpaghet
 The architecture supports:
 
 * New **rules**, deterministic or probabilistic;
-* New **clients** (REST API, GUI, batch processor);
-* New **simulation modes** (multi-day progression, scenarios, batch runs).
+* New **clients** (REST API, GUI, batch processor).
 
 ### Technical Stack
 
 #### Java 21
 
-Modern language features such as records and pattern matching simplify rule definitions and improve readability. Its performance and long-term support ensure a stable foundation.
+This project leverages modern Java features such as records, which promote immutability and enable safer validation. Java 21 also provides strong performance, long-term support, and a mature ecosystem, ensuring a stable and future-proof foundation.
 
 #### Maven
 
