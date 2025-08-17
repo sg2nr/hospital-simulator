@@ -18,19 +18,19 @@ import com.hospital.rule.BinomialSampler;
 class FlyingSpaghettiMonsterRuleTest {
 
   @Test
-  void testApplyWhenTwoMillionDeadShouldReturnTwoHealthy() {
+  void testApplyWhenTwoMillionDeadAndFlyingSpaghettiMonsterResurrectsShouldReturnTwoHealthy() {
     // Given
     int deadCount = 2_000_000;
     Map<HealthState, Integer> initialCounts = Map.of(HealthState.DEAD, deadCount, HealthState.HEALTHY, 0);
 
     // When
+    int expectedResurrected = 2;
     BinomialSampler binomialSampler = Mockito.mock(BinomialSampler.class);
-    Mockito.when(binomialSampler.sample(anyInt(), anyDouble())).thenReturn(2);
+    Mockito.when(binomialSampler.sample(anyInt(), anyDouble())).thenReturn(expectedResurrected);
     FlyingSpaghettiMonsterRule rule = new FlyingSpaghettiMonsterRule(binomialSampler);
     Map<HealthState, Integer> result = rule.apply(initialCounts, Set.of());
 
     // Then
-    int expectedResurrected = 2;
     assertEquals(deadCount - expectedResurrected, result.get(HealthState.DEAD));
     assertEquals(expectedResurrected, result.get(HealthState.HEALTHY));
   }

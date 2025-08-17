@@ -112,15 +112,13 @@ class SimulatorEngineTest {
   @Test
   void testSimulateWithNullRequestShouldThrowException() {
     // Given
-    SimulationRequest request = null;
-
     List<Rule> rules = List.of(new AspirinRule(), new AntibioticRule(), new InsulinRule(), new ParacetamolRule(),
         new FlyingSpaghettiMonsterRule());
     SimulatorEngine simulatorEngine = new SimulatorEngine(rules);
 
     // When
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-        () -> simulatorEngine.simulate(request));
+        () -> simulatorEngine.simulate(null));
 
     // Then
     assertEquals("Simulation request cannot be null.", exception.getMessage());

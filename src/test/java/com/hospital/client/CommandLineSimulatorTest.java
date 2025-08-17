@@ -59,6 +59,9 @@ class CommandLineSimulatorTest {
         Arguments.of(new String[] { "F,F,H,D,T", "P,An" }, "F:0,H:4,D:0,T:0,X:1"),
         Arguments.of(new String[] { "F,D,T,H,X", "P,An,I" }, "F:0,H:3,D:1,T:0,X:1"),
         Arguments.of(new String[] { "H,H,H,H,H", "As,P,An,I" }, "F:0,H:0,D:0,T:0,X:5"),
+        Arguments.of(new String[] { "F,F", "As" }, "F:0,H:2,D:0,T:0,X:0"),
+        Arguments.of(new String[] { "F,D,T", "As,An,I" }, "F:2,H:0,D:1,T:0,X:0"),
+        Arguments.of(new String[] { "F,F,H,D,D,T", "As,An,P,I" }, "F:0,H:0,D:0,T:0,X:6"),
         Arguments.of(new String[] { "H,H,H,H,H,F,D,D,D,T,T", "As,P,An,I" }, "F:0,H:0,D:0,T:0,X:11"),
         // Example 1 in lower-case
         Arguments.of(new String[] { "d,d" }, "F:0,H:0,D:0,T:0,X:2"),

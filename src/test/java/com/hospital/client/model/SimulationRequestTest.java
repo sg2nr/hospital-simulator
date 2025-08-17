@@ -30,12 +30,11 @@ class SimulationRequestTest {
   @Test
   void testCreateSimulationRequestWithNullInitialPatientsShouldThrowException() {
     // Given
-    Map<HealthState, Integer> initialPatients = null;
     Set<Drug> drugs = Set.of(Drug.ANTIBIOTIC);
 
     // When
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-        () -> new SimulationRequest(initialPatients, drugs));
+        () -> new SimulationRequest(null, drugs));
 
     // Then
     assertEquals("Invalid SimulationRequest: Initial patients map cannot be null.", exception.getMessage());
@@ -59,10 +58,9 @@ class SimulationRequestTest {
   void testCreateSimulationRequestWithNullDrugsShouldInitializeToEmptySet() {
     // Given
     Map<HealthState, Integer> initialPatients = Map.of(HealthState.HEALTHY, 10);
-    Set<Drug> drugs = null;
 
     // When
-    SimulationRequest request = new SimulationRequest(initialPatients, drugs);
+    SimulationRequest request = new SimulationRequest(initialPatients, null);
 
     // Then
     assertEquals(Set.of(), request.drugs());
