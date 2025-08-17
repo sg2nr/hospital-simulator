@@ -176,6 +176,10 @@ Any client only needs to send a `SimulationRequest` and handle a `SimulationResp
                       +-------------------------+
 ```
 
+#### Immutability of Core Domain Objects
+The `SimulationRequest` is implemented as a Java `record`, which enforces immutability by design.
+Validation logic is applied within the constructor to guarantee that only valid requests can be instantiated. This prevents propagation of invalid states across the system and shifts error detection as early as possible, closer to the API boundary.
+
 #### Rule-based Engine
 
 At the core of the design is the `Rule` interface:
@@ -217,7 +221,7 @@ Rules can depend on external services or utilities. For instance, `FlyingSpaghet
 * **Fail Fast**: Invalid inputs cause immediate termination with a clear error message.
 * **Validation**: Inputs are validated upfront through `RuleValidationUtils`, ensuring consistency and avoiding duplication.
 * **Precondition Checks**: Each rule verifies its inputs before applying logic.
-* **Logging**: Errors are written to `stderr`; results are written to `stdout`.
+* **Logging**: Errors are written to `stderr`.
 
 ### Future Extensions
 
