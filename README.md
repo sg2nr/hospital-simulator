@@ -5,7 +5,8 @@ A Java application that simulates patient health state transitions in a hospital
 ## Table of Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
+- [Building the Project](#building-the-project)
+- [Running the Application](#running-the-application)
 - [Usage Examples](#usage-examples)
 - [Design Decisions & Assumptions](#design-decisions--assumptions)
 - [Development](#development)
@@ -40,15 +41,6 @@ java -version
 # Check Maven version
 mvn -version
 ```
-
-## Quick Start
-
-```bash
-mvn clean package
-java -jar target/hospital-simulator.jar F,H,D As,An
-```
-
-Expected output: `F:0,H:2,D:0,T:0,X:1`
 
 ## Building the Project
 
