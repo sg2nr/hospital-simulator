@@ -54,7 +54,7 @@ Expected output: `F:0,H:2,D:0,T:0,X:1`
 
 ### Full Build with Tests
 ```bash
-mvn clean verify
+mvn clean package
 ```
 
 ### Quick Build (Skip Tests)
