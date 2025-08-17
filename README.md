@@ -55,7 +55,7 @@ mvn clean package -DskipTests
 ```
 
 ### Build Outputs
-- `target/hospital-simulator.jar` - Executable JAR (shaded with dependencies)
+- `target/hospital-simulator.jar` - Executable JAR
 
 ## Running the Application
 
